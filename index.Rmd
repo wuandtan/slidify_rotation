@@ -1,0 +1,88 @@
+---
+title       : Graph rotation
+subtitle    : Rotating 2-dimensional Gaussian Samples
+author      : Tingyao WU
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Introduction
+
+- Goal
+
+-- Generate a desinated number of two-dimensional samples with Gaussian distribution
+
+-- Rotate the samples with a desinated angle
+
+-- Be emcompassed by an ellipse
+
+--- .class #id 
+
+## Mathematical formula
+- The multivariate Gaussian distribution
+
+-- PDF: $p(\mathbf{x})=(2\pi)^{-\frac{k}{2}}|\Sigma|^{-\frac{1}{2}}e^{-\frac{1}{2}(\mathbf{x}-\mathbf{\mu})^{t} {\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu})}$
+
+
+- Formula of rotation with the angle $\theta$
+
+Suppose the orignial sample is at $(x,y)$, after rotation with $\theta$ degree, the new sample $(x',y')$ is at 
+
+$x'=x\times{\cos(\theta)}+y\times{\sin(\theta)}$, 
+
+$y'=-x\times{\sin(\theta)}+y\times{\cos(\theta)}$
+
+
+---
+
+## Sample before rotation
+
+- Original Samples
+
+
+```{r, echo=FALSE}
+library(plotrix)
+#sample size
+s <- 1000 
+# the first dimension
+mu.1 <- 0
+sigma.1 <- 1
+#the second dimension
+mu.2 <- 4
+sigma.2 <- 8
+
+#angle
+angle <- 0
+#data generation
+data.1 <- rnorm(s,mean=mu.1,sd=sigma.1)
+data.2 <- rnorm(s,mean=mu.2,sd=sigma.2)
+#plot with ellipse
+plot(data.1,data.2,xlim=c(mu.2-3*sigma.2,mu.2+3*sigma.2),ylim=c(mu.2-3*sigma.2,mu.2+3*sigma.2),col="blue")
+draw.ellipse(mean(data.1), mean(data.2), a = 3*sd(data.1), b = 3*sd(data.2), angle = 360-angle, deg = TRUE)
+```
+
+
+---
+
+## Sample After rotation
+
+- Sample after rotation 90 degree
+
+```{r, echo=FALSE}
+#angle
+angle <- 90
+#after rotation
+newdata.1 <- data.1*cos(3.1415926*2*angle/360)+data.2*sin(3.1415926*2*angle/360)
+newdata.2 <- -data.1*sin(3.1415926*2*angle/360)+data.2*cos(3.1415926*2*angle/360)
+#plot
+plot(newdata.1,newdata.2,xlim=c(mu.2-3*sigma.2,mu.2+3*sigma.2),ylim=c(mu.2-3*sigma.2,mu.2+3*sigma.2),col="blue")
+                        
+draw.ellipse(mean(newdata.1), mean(newdata.2), a = 3*sd(data.1), b = 3*sd(data.2), angle = 360-angle, deg = TRUE)
+
+```
+
